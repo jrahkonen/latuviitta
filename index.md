@@ -1,15 +1,33 @@
-## Latuviitan GDAL-ohjeita
+## Latuviitan tuhat GDAL-ohjetta
+
+(työn alla, valmiina 1 %)
 
 GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojakin.
 
 
-### Tuhat ensimmäistä GDAL-tehtävää
+### GDAL-ohjelmien käyttöesimerkkejä
 
 |Numero| Tehtävä|      
 |---|---|
-|1| Lisää uusi sarake shapefileen|
+|1| Lisää uusi sarake shapefileen.
 ||ogrinfo -sql "alter table states add wkt_geom text" states.shp
-|2| Ota polygonin keskipiste, vaihda sen koordinaattijärjestelmä, ja tallenna tulos WKT-tekstinä haluttuun shapefilen kenttään|
+|2| Ota polygonin keskipiste, vaihda sen koordinaattijärjestelmä, ja tallenna tulos WKT-tekstinä haluttuun shapefilen kenttään.
 ||ogrinfo -dialect sqlite -sql "update states set wkt_geom=ST_AsText(ST_Transform(ST_Centroid(geometry),3857))" states.shp
-|3| Tiivistä GeoPackage vapauttamalla poistettujen rivien vaatima levytila|
-|| ogrinfo -sql "VACUUM" oma_geopackage.gpkg
+|3| Tiivistä GeoPackage vapauttamalla poistettujen rivien vaatima levytila.
+||ogrinfo -sql "VACUUM" oma_geopackage.gpkg
+|4| Selvitä, mitä GDAL-versiota käytät.
+||gdalinfo --version
+|5| Selvitä, mitkä SQLite- ja SpatiaLite-versiot ovat käytössä - joku olemassa oleva tietolähde on osoitettava, se voi olla mikä tahansa.
+||ogrinfo -dialect SQLite -sql "select sqlite_version(), spatialite_version()" foo.shp
+|6| Selvitä, mitä ajureita käytössä oleva GDAL tukee - ogrinfo vektoriformaateille, gdalinfo rasteriformaateille.
+||gdalinfo --formats
+|7| Selvitä tietyn ajurin ominaisuudet - vastaus XML-muodossa.
+||ogrinfo --format gml
+|8| Peruskomento, jolla saa aikaan QGIS:ssä, GeoServerissä ym. hyvin toimivan GeoTIFF:in. Häviötön pakkaus.
+||gdal_translate -of GTiff -co tiled=yes -co compress=deflate input.tif output.tif
+|9| Peruskomento ilma- ja satelliittikuvien muuntamiseksi. JPEG-pakkaus - pieni tiedostokoko.
+||gdal_translate -of Gtiff -co tiled=yes -co compress=jpeg --config photometric=ycbcr input.tif output.tif
+|10| Ilmakuville hyvä komento overview-tasojen lisäämiseksi - tehokas pakkaus myös niille.
+||gdaladdo -r average --config COMPRESS_OVERVIEW JPEG --config PHOTOMETRIC_OVERVIEW YCBCR output.tif
+
+
