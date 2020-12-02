@@ -1,6 +1,6 @@
 ## Latuviitan tuhat GDAL-ohjetta
 
-(työn alla, valmiina 1 %)
+(työn alla, valmiina 1,5 %)
 
 GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojakin.
 
@@ -29,5 +29,15 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||gdal_translate -of Gtiff -co tiled=yes -co compress=jpeg --config photometric=ycbcr input.tif output.tif
 |10| Ilmakuville hyvä komento overview-tasojen lisäämiseksi - tehokas pakkaus myös niille.
 ||gdaladdo -r average --config COMPRESS_OVERVIEW JPEG --config PHOTOMETRIC_OVERVIEW YCBCR output.tif
+|11| PostGIS:in yhteyden syntaksia ei vaan millään tahdo muistaa ulkoa.
+||ogrinfo PG:"host=localhost port=5432 dbname=oma_postgis user=käyttäjä password=salasana"
+|12| Lisätään PostGIS-tauluun toinen geometriakenttä.
+||ogrinfo PG:"host=localhost port=5432 dbname=oma_postgis user=käyttäjä password=salasana" -sql "alter table testitaulu add column geom2 geometry"
+|13| Päivitetään toinen geometriakenttä ja kirjoitetaan siihen toiseen koordinaattijärjestelmään muunnetut geometriat.
+||ogrinfo PG:"host=localhost port=5432 dbname=oma_postgis user=käyttäjä password=salasana" -sql "update testitaulu set geom2=ST_Transform(geom,3857)"
+|14| FeatureID on normaalisti piilotettu. Näin sen saa tavalliseksi attribuutiksi OGRSQL-murteella.
+||ogr2ogr -f CSV -sql "select FID, * from testi_shape" output.csv testi_shape.shp
+|15| Shapefilen FID on erityisen piilossa SQLite-murteelle, mutta näin sen saa esille ja talteen.
+||ogr2ogr -f CSV -dialect SQLite -sql "select rowid as feature_id, * from testi_shape" output.csv testi_shape.shp
 
 
