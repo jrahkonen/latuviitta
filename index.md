@@ -37,7 +37,11 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||ogrinfo PG:"host=localhost port=5432 dbname=oma_postgis user=käyttäjä password=salasana" -sql "update testitaulu set geom2=ST_Transform(geom,3857)"
 |14| FeatureID on normaalisti piilotettu. Näin sen saa tavalliseksi attribuutiksi OGRSQL-murteella.
 ||ogr2ogr -f CSV -sql "select FID, * from testi_shape" output.csv testi_shape.shp
-|15| Shapefilen FID on erityisen piilossa SQLite-murteelle, mutta näin sen saa esille ja talteen.
+|15| FID on helpointa etsiä OGRSQL-murteella, jolle sen nimi on aina "FID". Tietokantojen omilla SQL-murteilla sekä GDAL:in SQLite-murteella täytyy käyttää FID-kentän oikeaa nimeä, mutta aina sitä ei ole olemassa. Shapefilen FID löytyy SQLite-murteelle näin.
 ||ogr2ogr -f CSV -dialect SQLite -sql "select rowid as feature_id, * from testi_shape" output.csv testi_shape.shp
+|16| Lue tietoja suoraan zip-arkistosta, jossa on GDAL:in tunnistamia paikkatietoaineistoja
+||ogrinfo /vsizip/zipattu_geopackage.zip
+|17| Lue tietoja zip-arkistosta, joka on netissä http-yhteyden takana
+||ogrinfo /vsizip/vsicurl/"http://latuviitta.org/downloads/Pyhajarvi_001.zip"
 
 
