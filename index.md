@@ -46,8 +46,8 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 |18| Tee GeoTIFF-kuvasta kopio, josta on riisuttu pois kaikki GeoTIFF-tagit
 ||gdal_translate -of GTiff -co profile=baseline --config GDAL_PAM_ENABLED NO input.tif puhdas_tif.tif
 |19| Shapefile sisältää sekä polygoneja että multipolygoneja. Tallenna ne sellaisenaan formaattiin, joka voi asettaa geometriatyypille rajoitteita (esim. PostGIS, GeoPackage)
-ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -nlt GEOMETRY
+||ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -nlt GEOMETRY
 |20| Sama tilanne kuin edellä, mutta muunnetaan kaikki polygonit multipolygon-muotoon
-ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -nlt PROMOTE_TO_MULTI
+||ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -nlt PROMOTE_TO_MULTI
 |21| Sama tilanne edelleen, mutta hajoitetaan multipolygonit (kohteiden määrä kasvaa) ja tallennetaan kaikki polygoneina
-ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -explodecollections
+||ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -explodecollections
