@@ -43,5 +43,11 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||ogrinfo /vsizip/zipattu_geopackage.zip
 |17| Lue tietoja zip-arkistosta, joka on netissä http-yhteyden takana
 ||ogrinfo /vsizip/vsicurl/"http://latuviitta.org/downloads/Pyhajarvi_001.zip"
-
-
+|18| Tee GeoTIFF-kuvasta kopio, josta on riisuttu pois kaikki GeoTIFF-tagit
+||gdal_translate -of GTiff -co profile=baseline --config GDAL_PAM_ENABLED NO input.tif puhdas_tif.tif
+|19| Shapefile sisältää sekä polygoneja että multipolygoneja. Tallenna ne sellaisenaan formaattiin, joka voi asettaa geometriatyypille rajoitteita (esim. PostGIS, GeoPackage)
+ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -nlt GEOMETRY
+|20| Sama tilanne kuin edellä, mutta muunnetaan kaikki polygonit multipolygon-muotoon
+ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -nlt PROMOTE_TO_MULTI
+|21| Sama tilanne edelleen, mutta hajoitetaan multipolygonit (kohteiden määrä kasvaa) ja tallennetaan kaikki polygoneina
+ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -explodecollections
