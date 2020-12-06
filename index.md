@@ -51,3 +51,7 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -nlt PROMOTE_TO_MULTI
 |21| Sama tilanne edelleen, mutta hajoitetaan multipolygonit (kohteiden määrä kasvaa) ja tallennetaan kaikki polygoneina
 ||ogr2ogr -f GPKG oma_geopackage.gpkg polygon.shp -explodecollections
+|22| Kahden lon-lat -pisteen välinen etäisyys metreinä ellipsoidin pintaa pitkin mitattuna
+||ogrinfo -dialect SQLite -sql "SELECT ST_Distance(ST_GeomFromText('POINT (130.4572 33.0115)'),ST_GeomFromText('POINT (130.4572 33.0063)'),1)" foo.jml
+|23| Tee satunnainen piste, jonka x ja y ovat kokonaislukuja väliltä 0-100
+||ogrinfo -dialect sqlite -sql "select st_geomfromtext('POINT ('\|\|abs(random() % 100) \|\|' '\|\|abs(random() % 100)\|\|')')" foo.jml
