@@ -55,3 +55,5 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||ogrinfo -dialect SQLite -sql "SELECT ST_Distance(ST_GeomFromText('POINT (130.4572 33.0115)'),ST_GeomFromText('POINT (130.4572 33.0063)'),1)" foo.jml
 |23| Tee satunnainen piste, jonka x ja y ovat kokonaislukuja väliltä 0-100
 ||ogrinfo -dialect sqlite -sql "select st_geomfromtext('POINT ('\|\|abs(random() % 100) \|\|' '\|\|abs(random() % 100)\|\|')')" foo.jml
+|24| Tee uusi GeoPackage ja siihen taulu, jossa on 10000 pistettä annetun polygonin sisällä (vaatii, että PostGIS on saatavilla)
+||ogr2ogr -f gpkg random_points.gpkg PG:"host=localhost port=5432 dbname=database user=käyttäjä password=salasana" -sql "SELECT ST_GeneratePoints(geom, 10000, 1996) FROM (SELECT ST_Buffer(ST_GeomFromText('LINESTRING(50 50,150 150,150 50)'),10, 'endcap=round join=round') AS geom) AS s" -explodecollections -nln points
