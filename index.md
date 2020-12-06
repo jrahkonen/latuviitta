@@ -1,6 +1,6 @@
 ## Latuviitan tuhat GDAL-ohjetta
 
-(työn alla, valmiina 1,5 %)
+(työn alla, valmiina 2,7 %)
 
 GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojakin.
 
@@ -57,3 +57,9 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||ogrinfo -dialect sqlite -sql "select st_geomfromtext('POINT ('\|\|abs(random() % 100) \|\|' '\|\|abs(random() % 100)\|\|')')" foo.jml
 |24| Tee uusi GeoPackage ja siihen taulu, jossa on 10000 pistettä annetun polygonin sisällä (vaatii, että PostGIS on saatavilla)
 ||ogr2ogr -f gpkg random_points.gpkg PG:"host=localhost port=5432 dbname=database user=käyttäjä password=salasana" -sql "SELECT ST_GeneratePoints(geom, 10000, 1996) FROM (SELECT ST_Buffer(ST_GeomFromText('LINESTRING(50 50,150 150,150 50)'),10, 'endcap=round join=round') AS geom) AS s" -explodecollections -nln points
+|25| Muunnelma: peitä polygonin alue neliöillä
+||ogrinfo -dialect SQLite -sql "SELECT ST_SquareGrid(geom, 10) FROM (SELECT ST_Buffer(ST_GeomFromText('LINESTRING(50 50,150 150,150 50)'),10) AS geom) AS s" foo.jml
+|26| Muunnelma: peitä polygonin alue kolmioilla
+||ogrinfo -dialect SQLite -sql "SELECT ST_TriangularGrid(geom, 10) FROM (SELECT ST_Buffer(ST_GeomFromText('LINESTRING(50 50,150 150,150 50)'),10) AS geom) AS s" foo.jml
+|27| Muunnelma: peitä polygonin alue kuusikulmiolla
+||ogrinfo -dialect SQLite -sql "SELECT ST_HexagonalGrid(geom, 10) FROM (SELECT ST_Buffer(ST_GeomFromText('LINESTRING(50 50,150 150,150 50)'),10) AS geom) AS s" foo.jml
