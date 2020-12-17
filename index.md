@@ -1,13 +1,13 @@
 ## Latuviitan tuhat GDAL-ohjetta
 
-(työn alla, valmiina 2,7 %)
+(työn alla, valmiina 3,3 %)
 
 GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojakin.
 
 
 ### GDAL-ohjelmien käyttöesimerkkejä
 
-|Numero| Tehtävä|      
+|Numero| Tehtävä|
 |---|---|
 |1| Lisää uusi sarake shapefileen.
 ||ogrinfo -sql "alter table states add wkt_geom text" states.shp
@@ -63,3 +63,16 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||ogrinfo -dialect SQLite -sql "SELECT ST_TriangularGrid(geom, 10) FROM (SELECT ST_Buffer(ST_GeomFromText('LINESTRING(50 50,150 150,150 50)'),10) AS geom) AS s" foo.jml
 |27| Muunnelma: peitä polygonin alue kuusikulmiolla
 ||ogrinfo -dialect SQLite -sql "SELECT ST_HexagonalGrid(geom, 10) FROM (SELECT ST_Buffer(ST_GeomFromText('LINESTRING(50 50,150 150,150 50)'),10) AS geom) AS s" foo.jml
+|28| Selvitä, onko TIFF-kuvan tilastotiedot kuvan tilastotiedot (MIN, MAX, MEAN, STDDEV) jo laskettu
+||gdalinfo kuva.tif|
+||Jos tilastotiedot näkyvät, niin ne on laskettu. Jos on olemassa .aux.xml-tiedosto, niin ne on mahdollisesti tallennettu siihen. Jos aux.xml-tiedostoa ei ole, niin tilastotiedot on tallennettu TIFF-tiedoston tageihin.
+|29| Poista vanhat, mahdollisesti väärät tilastotiedot ennen niiden päivittämistä. Komento joko tuhoaa .aux.xml-tiedoston tai päivittää TIFF-tiedoston tagit. (Huom. Python-skripti).
+||gdal_edit -unsetstats kuva.tif
+|30| Laske ja näytä kuvan tilastotiedot sekä tallenna ne ulkoiseen aux.xml -tiedostoon 
+||gdalinfo -stats kuva.tif
+|31| Muunnelma: Laske ja näytä nopeat, mutta epätarkemmat tilastotiedot otoksen perusteella
+||gdalinfo -approx_stats kuva.tif
+|32| Muunnelma: Näytä tilastotiedot, mutta älä tallenna niitä
+||gdalinfo -stats kuva.tif --config GDAL_PAM_ENABLED NO
+|33| Muunnelma: Laske tilastotiedot ja tallenna ne TIFF-tiedoston sisään niille varattuihin tageihin (Huom. Python-skripti)
+||gdal_edit -stats kuva.tif
