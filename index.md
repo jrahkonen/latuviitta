@@ -76,3 +76,7 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||gdalinfo -stats kuva.tif --config GDAL_PAM_ENABLED NO
 |33| Muunnelma: Laske tilastotiedot ja tallenna ne TIFF-tiedoston sisään niille varattuihin tageihin (Huom. Python-skripti)
 ||gdal_edit -stats kuva.tif
+|34| Luo uusi yhdellä värillä täytetty TIFF-tiedosto, jonka ulottuvuudet ja georeferointi kopioidaan olemassa olevasta kuvasta.
+||gdal_create -burn 255 0 0 -if P4433H.tif punainen_ruutu.tif
+|35| Sama, mutta ilman mallikuvaa
+||gdal_create -of GTiff -outsize 12000 12000 -bands 3 -burn 0 0 255 -ot Byte -a_srs epsg:3067 -a_ullr 494000 7014000 500000 7008000 sininen_ruutu.tif
