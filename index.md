@@ -80,3 +80,7 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||gdal_create -burn 255 0 0 -if P4433H.tif punainen_ruutu.tif
 |35| Sama, mutta ilman mallikuvaa
 ||gdal_create -of GTiff -outsize 12000 12000 -bands 3 -burn 0 0 255 -ot Byte -a_srs epsg:3067 -a_ullr 494000 7014000 500000 7008000 sininen_ruutu.tif
+|36| Polta punaisen kuvan keskelle vihreä kierretty neliö, joka on luotu SQL:n avulla lennossa
+||gdal_rasterize -b 1 -b 2 -b 3 -burn 0 -burn 255 -burn 0 -dialect SQLite -sql "select ST_GeomFromText('POLYGON (( 494000 7008500, 494500 7014000, 500000 7013500, 499500 7008000, 494000 7008500 ))')" foo.jml punainen_ruutu.tif
+|37| Polta siniseen kuvaan mustaa annetun kierretyn neliön ulkopuolelle. Tulos simuloi uudelleen projisoitua rasterikuvaa, jonka nurkissa on nodata-kiilat.
+||gdal_rasterize -b 1 -b 2 -b 3 -burn 0 -burn 0 -burn 0 -i -dialect SQLite -sql "select ST_GeomFromText('POLYGON (( 494000 7008500, 494500 7014000, 500000 7013500, 499500 7008000, 494000 7008500 ))')" area.jml sininen_ruutu.tif
