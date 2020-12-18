@@ -1,6 +1,6 @@
 ## Latuviitan tuhat GDAL-ohjetta
 
-(työn alla, valmiina 3,3 %)
+(työn alla, valmiina 4,0 %)
 
 GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojakin.
 
@@ -84,3 +84,9 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||gdal_rasterize -b 1 -b 2 -b 3 -burn 0 -burn 255 -burn 0 -dialect SQLite -sql "select ST_GeomFromText('POLYGON (( 494000 7008500, 494500 7014000, 500000 7013500, 499500 7008000, 494000 7008500 ))')" foo.jml punainen_ruutu.tif
 |37| Polta siniseen kuvaan mustaa annetun kierretyn neliön ulkopuolelle. Tulos simuloi uudelleen projisoitua rasterikuvaa, jonka nurkissa on nodata-kiilat.
 ||gdal_rasterize -b 1 -b 2 -b 3 -burn 0 -burn 0 -burn 0 -i -dialect SQLite -sql "select ST_GeomFromText('POLYGON (( 494000 7008500, 494500 7014000, 500000 7013500, 499500 7008000, 494000 7008500 ))')" area.jml sininen_ruutu.tif
+|38| Hae Geofabrik:in latauspalvelusta uusin Suomen OpenStreetMap-aineisto ja tallenna se GeoPackage-muotoon.
+||ogr2ogr -f GPKG -t_srs EPSG:3067 osm_finland_uusi.gpkg /vsicurl_streaming/http://download.geofabrik.de/europe/finland-latest.osm.pbf
+|39| Muunna RGB-kuva harmaasävykuvaksi "ITU-R Recommendation BT.601" suosituksen mukaisella kaavalla
+| |gdal_calc.py -R input.tif --R_band=1 -G input.tif --G_band=2 -B input.tif --B_band=3 --outfile=result.tif --calc="R\*0.2989+G\*0.5870+B\*0.1140"
+|40| Hae http-palvelimelta kaksi TIFF-kuvaa, vertaile niitä, ja tee tulosrasteri niistä pikseleistä, joiden arvo molemmissa kuvissa on "17".
+||gdal_calc.py -A /vsicurl/https://vm0160.kaj.pouta.csc.fi/syke/corine/2012/corine_2012_100000_6700000.tif -B /vsicurl/https://vm0160.kaj.pouta.csc.fi/syke/corine/2006/corine_2006_100000_6700000.tif --outfile=pellot5.tif --calc="logical_and(A==17,B==17)" --type=Byte
