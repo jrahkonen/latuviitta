@@ -86,7 +86,17 @@ GDAL-ohjelmilla voi tehdä hämmästyttäviä asioita ilman ohjelmointitaitojaki
 ||gdal_rasterize -b 1 -b 2 -b 3 -burn 0 -burn 0 -burn 0 -i -dialect SQLite -sql "select ST_GeomFromText('POLYGON (( 494000 7008500, 494500 7014000, 500000 7013500, 499500 7008000, 494000 7008500 ))')" area.jml sininen_ruutu.tif
 |38| Hae Geofabrik:in latauspalvelusta uusin Suomen OpenStreetMap-aineisto ja tallenna se GeoPackage-muotoon.
 ||ogr2ogr -f GPKG -t_srs EPSG:3067 osm_finland_uusi.gpkg /vsicurl_streaming/http://download.geofabrik.de/europe/finland-latest.osm.pbf
-|39| Muunna RGB-kuva harmaasävykuvaksi "ITU-R Recommendation BT.601" suosituksen mukaisella kaavalla
+|39| Muunna JPEG-pakattu RGB-kuva (YCBCr) harmaasävykuvaksi "ITU-R Recommendation BT.601" suosituksen mukaisella kaavalla
 | |gdal_calc.py -R input.tif --R_band=1 -G input.tif --G_band=2 -B input.tif --B_band=3 --outfile=result.tif --calc="R\*0.2989+G\*0.5870+B\*0.1140"
 |40| Hae http-palvelimelta kaksi TIFF-kuvaa, vertaile niitä, ja tee tulosrasteri niistä pikseleistä, joiden arvo molemmissa kuvissa on "17".
 ||gdal_calc.py -A /vsicurl/https://vm0160.kaj.pouta.csc.fi/syke/corine/2012/corine_2012_100000_6700000.tif -B /vsicurl/https://vm0160.kaj.pouta.csc.fi/syke/corine/2006/corine_2006_100000_6700000.tif --outfile=pellot5.tif --calc="logical_and(A==17,B==17)" --type=Byte
+|41| Säästä vähän tilaa poistamalla Z-koordinaatit, jos niille ei ole käyttöä.
+||ogr2ogr -f "ESRI Shapefile" XY.shp XYZ.shp -dim XY
+|42| Yleistä viiva- ja aluegeometriat Douglas-Peucker-menetelmällä 10 mittayksikön toleranssilla
+||ogr2ogr -f JML -simplify 10 yleistetty.jml yleistämätön.jml
+|43| Tihennä geometrioita tarvittaessa niin, että taitepisteiden väli on korkeintaan 50 yksikköä. Usein hyödyllinen, jos geometriolle tehdään joko samalla kertaa tai myöhemmin projektionmuunnos.
+||ogr2ogr -f JML -segmentize 50 tihennnetty.jml harva.jml
+|44| Muunna aineisto niin, että topologiavirheitä sisältävät geometria samalla korjataan.
+||ogr2ogr -f JML -makevalid korjattu.jml viallinen.jml
+|45| Testaa jättimäisen aineiston muunnosta ensin sadalla kohteella
+||ogr2ogr -f JML -limit 100 pikkuotos.jml jättigeopackage.gpkg jättitaulu
