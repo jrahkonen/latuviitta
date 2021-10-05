@@ -7,7 +7,7 @@ Nro|Tehtävä
 || Tehtään PostGIS-kantaan uusi taulu jonka nimi on jo käytössä. Koska ensin tapahtuu "DROP TABLE", niin skeema voi muuttua.
 || `ogr2ogr -f PostgreSQL -overwrite PG:"host=localhost port=5432 dbname=oma_postgis user=kayttaja password=salasana" toinen_aineisto.jml -nln testitaulu`
 || Tyhjennetään olemassa oleva PostGIS-taulu ja kirjoitetaan siihen uusi sisältö.  Koska ensin tapahtuu "TRUNCATE TABLE", niin skeeman on oltava sama.
-|| `ogr2ogr -f PostgreSQL -append –-config OGR_TRUNCATE YES PG:"host=localhost port=5432 dbname=oma_postgis user=kayttaja password=salasana" aineisto.jml -nln testitaulu`
+|| `ogr2ogr -f PostgreSQL -append –-config OGR_TRUNCATE YES PG:"host=localhost port=5432 dbname=oma_postgis user=kayttaja password=salasana" aineiston_uusi_versio.jml -nln testitaulu`
 || Ei poisteta eikä tyhjennetä olemassa olevaa PostGIS-taulua, vaan lisätään sen jatkeeksi uutta sisältöä. Skeeman on oltava sama.
 || `ogr2ogr -f PostgreSQL -append PG:"host=localhost port=5432 dbname=oma_postgis user=kayttaja password=salasana" aineisto.jml -nln testitaulu`
 || Lisätään olemassa olevan taulun jatkeeksi uutta sisältöä. Jos skeemat eivät ole samat, niin PostGIS-tauluun lisätään uusissa tiedoissa esiintyvät uudet attribuutit.
