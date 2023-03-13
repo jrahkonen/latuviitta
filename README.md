@@ -1,8 +1,12 @@
 # latuviitta
-Command examples for GDAL utilities
-## Support
-Use GitHub issues for reporting bugs and suggesting new command examples
+Usage examples for some GDAL utilities
+## Support and contact details
+The author does not provide official support for this repository but users are still encouraged
+to use GitHub issues for reporting bugs and suggesting new examples to be added. Even unresolved bug reports
+may help other users.
+Please do not use public GitHub issues for reporting security vulnerabilities.
 ## Security
-See [SECURITY](/SECURITY.md)
-## Licence
-CC-By 4.0
+If you have encountered a potential security vulnerability in this project, please read the security policy
+[SECURITY](/SECURITY.md)
+## Licence and copyright
+Contents are published under [LICENSE](/LICENSE), (c) Jukka Rahkonen
