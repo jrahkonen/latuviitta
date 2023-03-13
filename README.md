@@ -8,5 +8,5 @@ For general questions use email foo.bar@foobar.fi
 Please do not use public GitHub issues for reporting security vulnerabilities.
 ## Security
 If you have encountered a potential security vulnerability in this project, please read the [SECURITY POLICY](/SECURITY.md)
-## Licence and copyright
+## License and copyright
 Contents are published under [LICENSE](/LICENSE), (c) Jukka Rahkonen
